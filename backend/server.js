@@ -19,7 +19,7 @@ const pool = new Pool({
 });
 
 const redis = new Redis(process.env.REDIS_URL, {
-  tls: {}, // needed for secure connection on Render
+  connectTimeout: 10000,
 });
 const PRESENCE_TTL = 20; // seconds; heartbeat should be < this
 const room = (id) => `doc_${id}`;
