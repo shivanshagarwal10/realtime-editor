@@ -14,15 +14,13 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
 
-const redis = new Redis(process.env.REDIS_URL);
-
+const redis = new Redis(process.env.REDIS_URL, {
+  tls: {}, // needed for secure connection on Render
+});
 const PRESENCE_TTL = 20; // seconds; heartbeat should be < this
 const room = (id) => `doc_${id}`;
 const activeSet = (id) => `doc:${id}:active`;               // users currently active in doc
