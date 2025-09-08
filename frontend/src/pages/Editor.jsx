@@ -3,8 +3,9 @@ import { useEffect, useState, useRef, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import { getDocument, getDocMembers } from "../api";
+import { API_URL } from "../config";
 
-const socket = io("http://localhost:3000");
+const socket = io(API_URL);
 
 // --- stable color per user for cursor chips ---
 const colors = ["#10B981", "#6366F1", "#F59E0B", "#EC4899", "#06B6D4", "#84CC16"];

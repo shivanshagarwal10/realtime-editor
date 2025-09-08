@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../config";
+
 
 export default function Login({ setUser }) {
   const [username, setUsername] = useState("");
@@ -14,7 +16,7 @@ export default function Login({ setUser }) {
       return;
     }
     try {
-      const res = await axios.post("http://localhost:3000/login", { username });
+      const res = await axios.post(`${API_URL}/login`, { username });
       if (res.data.success) {
         setUser(res.data.user);
         navigate("/documents");
@@ -26,6 +28,7 @@ export default function Login({ setUser }) {
       setError("Server error");
     }
   };
+  
 
   const fillRandom = () => {
     const suggestions = ["alice", "bob", "charlie", "dana", "ravi", "nina"];
