@@ -12,7 +12,8 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:5173", // local dev
-      "https://realtime-editor-i7hwo0mev-shivansh-agarwals-projects-8da7490e.vercel.app" // your Vercel frontend domain
+      "https://realtime-editor-i7hwo0mev-shivansh-agarwals-projects-8da7490e.vercel.app",
+      "https://realtime-editor-iota.vercel.app" 
     ],
     methods: ["GET", "POST"],
     credentials: true
@@ -20,7 +21,16 @@ const io = new Server(server, {
 });
 
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://realtime-editor-i7hwo0mev-shivansh-agarwals-projects-8da7490e.vercel.app",
+    "https://realtime-editor-iota.vercel.app"
+  ],
+  methods: ["GET", "POST"],
+  credentials: true
+}));
+
 app.use(express.json());
 
 const pool = new Pool({
@@ -306,6 +316,7 @@ io.on("connection", (socket) => {
 });
 
 /* ---------------- START ---------------- */
-server.listen(3000, () => {
-  console.log("✅ Backend running at http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`✅ Backend running on port ${PORT}`);
 });
