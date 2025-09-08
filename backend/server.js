@@ -11,12 +11,14 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: [
-      "http://localhost:5173",
-      "https://realtime-editor-iota.vercel.app" // your actual Vercel domain
+      "http://localhost:5173", // local dev
+      "https://realtime-editor-i7hwo0mev-shivansh-agarwals-projects-8da7490e.vercel.app" // your Vercel frontend domain
     ],
     methods: ["GET", "POST"],
+    credentials: true
   },
 });
+
 
 app.use(cors());
 app.use(express.json());
