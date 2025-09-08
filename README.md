@@ -1,87 +1,147 @@
-📄 CollabWrite – Real-Time Collaborative Document Editor
-🚀 Overview
+# Realtime Editor ✍️
 
-CollabWrite is a full-stack real-time collaborative document editor.
-It allows multiple users to edit documents together, chat in real time, and see who’s online/offline with live typing + cursor indicators.
+A real-time collaborative text editor built with **React (Vite)**, **Node.js/Express**, **PostgreSQL**, **Redis**, and **Socket.IO**.
+Multiple users can create, join, and collaboratively edit documents in real time with live cursors and chat.
 
-Built as part of the Full Stack Developer Assignment.
+---
 
-✨ Features
+## 🚀 Features
 
-🔑 Authentication – Simple username login (new users prompted, existing auto-login).
+* 🔑 User login with unique usernames
+* 📄 Create and manage documents
+* 👥 Real-time collaboration (multiple users editing simultaneously)
+* 💬 Chat within documents
+* ✨ Live presence (see who’s online/offline)
+* 🖱️ Live cursor tracking
+* 💾 PostgreSQL for persistence
+* ⚡ Redis for presence & caching
+* 🌍 Deployed with **Render** (backend) and **Vercel** (frontend)
 
-📝 Collaborative Editing – Multiple users can edit a document in real time.
+---
 
-📌 Presence – Shows who is active in the document.
+## 🛠️ Tech Stack
 
-Online users → colored avatar + cursor.
+* **Frontend**: React (Vite), TailwindCSS
+* **Backend**: Node.js, Express
+* **Database**: PostgreSQL (Render)
+* **Cache/Presence**: Redis (Render Key-Value)
+* **Realtime**: Socket.IO
+* **Deployment**:
 
-Offline users → greyed out but listed.
+  * Backend → Render
+  * Frontend → Vercel
 
-🖱 Live Cursors – Each active user has a unique cursor + username label.
+---
 
-💬 Chat System – In-document chat with typing indicators.
+## 📂 Project Structure
 
-🔗 Shareable Documents – Each document has its own ID + link.
+```
+realtime-editor/
+│
+├── backend/           # Express + Socket.IO server
+│   ├── server.js
+│   ├── package.json
+│   └── schema.sql     # Database schema
+│
+├── frontend/          # React (Vite) app
+│   ├── src/
+│   │   ├── pages/     # React pages (Login, Documents, Editor)
+│   │   └── config.js  # API_URL setup
+│   ├── vite.config.js
+│   └── package.json
+│
+└── README.md
+```
 
-💾 Persistence – Documents and chat history stored in PostgreSQL.
+---
 
-⚡ Realtime Infrastructure – Built with Socket.IO + Redis pub/sub for live sync.
+## ⚙️ Setup (Local Development)
 
-🛠 Tech Stack
+### 1. Clone Repo
 
-Frontend
+```bash
+git clone https://github.com/<your-username>/realtime-editor.git
+cd realtime-editor
+```
 
-React (Vite)
+### 2. Backend Setup
 
-TailwindCSS
-
-Backend
-
-Node.js + Express
-
-Socket.IO (real-time events)
-
-Database & Infra
-
-PostgreSQL – persistent data (users, documents, chat)
-
-Redis – presence + active users tracking
-
-📂 Project Structure
-/client   → React frontend
-/server   → Express + Socket.IO backend
-
-⚙️ Setup Instructions
-1️⃣ Clone & Install
-git clone <your-repo-url>
-cd project
-
-
-Frontend:
-
-cd client
+```bash
+cd backend
 npm install
+```
 
+Create a `.env` file in `backend/`:
 
-Backend:
+```env
+PORT=3000
+DATABASE_URL=postgresql://<user>:<password>@<host>/<db>
+REDIS_URL=redis://<user>:<password>@<host>:6379
+```
 
-cd server
+Run migrations:
+
+```bash
+psql <DATABASE_URL> -f schema.sql
+```
+
+Start server:
+
+```bash
+npm start
+```
+
+### 3. Frontend Setup
+
+```bash
+cd frontend
 npm install
+```
 
-2️⃣ Configure DB
+Create `.env` in `frontend/`:
 
-PostgreSQL setup:
+```env
+VITE_API_URL=http://localhost:3000
+```
 
-CREATE DATABASE realtime_editor;
+Start frontend:
 
--- Users
+```bash
+npm run dev
+```
+
+---
+
+## 🌍 Deployment
+
+### Backend (Render)
+
+* Add environment variables in Render dashboard:
+
+  * `DATABASE_URL`
+  * `REDIS_URL`
+  * `PORT=3000`
+* Deploy backend service.
+
+### Frontend (Vercel)
+
+* Add environment variable:
+
+  * `VITE_API_URL=https://<your-render-backend-url>`
+* Deploy frontend.
+
+---
+
+## 📜 Database Schema
+
+`schema.sql`:
+
+```sql
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   username TEXT UNIQUE NOT NULL
 );
 
--- Documents
 CREATE TABLE documents (
   id SERIAL PRIMARY KEY,
   title TEXT NOT NULL,
@@ -89,52 +149,26 @@ CREATE TABLE documents (
   last_edited TIMESTAMP DEFAULT NOW()
 );
 
--- Chat
 CREATE TABLE chat_messages (
   id SERIAL PRIMARY KEY,
   document_id INT REFERENCES documents(id) ON DELETE CASCADE,
-  user_id INT REFERENCES users(id),
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
   message TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
+```
 
+---
 
-Update DB credentials in server.js.
+## 🧪 Testing
 
-3️⃣ Run the Backend
-cd server
-node server.js
+1. Run backend (`npm start` in backend folder)
+2. Run frontend (`npm run dev` in frontend folder)
+3. Open `http://localhost:5173`, login, create a doc, and start collaborating 🎉
 
+---
 
-Backend running at: http://localhost:3000
+## 👨‍💻 Author
 
-4️⃣ Run the Frontend
-cd client
-npm run dev
+Made by Shivansh Agarwal (https://github.com/shivanshagarwal10) 
 
-
-Frontend running at: http://localhost:5173
-
-📸 Screenshots (to include in submission)
-
-Login screen
-
-Document list
-
-Document editing with multiple users
-
-Chat + presence sidebar
-
-Offline users greyed out
-
-✅ Assignment Deliverables
-
-Real-time editing with live cursors
-
-Presence (online/offline)
-
-Chat with typing indicators
-
-Persistent DB for docs & chat
-
-Shareable document links
